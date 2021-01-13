@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('send_test_mail','TestController@sendTestEmail')->name('send_test_mail');
