@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Campaigns;
 
 class TestController extends Controller
 {
     //
+
+    public function testCalls() {
+        $campaigns = new Campaigns();
+        $campaigns->getScheduledCampaignsList();
+    }
 
     public function sendTestEmail() {
 

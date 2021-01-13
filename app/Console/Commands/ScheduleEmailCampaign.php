@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Campaigns;
+use App\Models\CampaignDetails;
 
 class ScheduleEmailCampaign extends Command
 {
@@ -37,7 +39,15 @@ class ScheduleEmailCampaign extends Command
      */
     public function handle()
     {
+        $campaigns = new Campaigns();
+        $campaingsList = $campaigns->getScheduledCampaignsList();
 
+        $campaignDetails = new CampaignDetails();
+        foreach($campaingsList as $campaing) {
+            $cDetails = $campaignDetails->getCampaignDetailsById($campaing->id);
+            print_r($cDetails);
+        }
+//        print_r($campaingsList);
         $this->info('Checks if any campaign is schedule for the time then send it in queue');
         return 0;
     }

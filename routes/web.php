@@ -17,4 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('test_calls','TestController@testCalls')->name('test_calls');
 Route::get('send_test_mail','TestController@sendTestEmail')->name('send_test_mail');
