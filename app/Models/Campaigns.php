@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
-use CommonHelper;
 
 class Campaigns extends Model
 {
@@ -112,14 +111,26 @@ class Campaigns extends Model
 		return $data;
     }
 
-    public function getScheduledCampaignsList() {
+    public function getScheduledCampaignsList($scheduleDate) {
 
     	$query = DB::table($this->table);
     	$query->where('is_scheduled',1);
-		$query->where('scheduled_at', '<=', CommonHelper::getTodayDateTime());
+		$query->where('scheduled_at', '<=', $scheduleDate);
 		$query->where('status',self::COMPLETE);
 		
 		$results = $query->get()->sortByDesc('id')->toArray();
 		return $results;
     }
+
+    public function updateCampaignsStatus($campaignIds=[]){
+
+        if(!is_array($campaignIds) || empty($campaignIds)) {
+            return false;
+        } else {
+            DB::table($this->table)->whereIn('id',$campaignIds)->update(['status' => self::SENDING]);   
+            return true;         
+        }
+
+
+    } 
 }
