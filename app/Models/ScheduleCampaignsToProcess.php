@@ -19,4 +19,13 @@ class ScheduleCampaignsToProcess extends Model
     public const TYPE_SPLIT = 2;
     public const TYPE_SMS = 3;
 
+    public function getScheduledCampaignsListByStatus($status=0) {
+
+    	$query = DB::table($this->table);
+		$query->where('status',$status);
+		
+		$results = $query->get()->sortByDesc('id')->toArray();
+		return $results;
+    }
+
 }

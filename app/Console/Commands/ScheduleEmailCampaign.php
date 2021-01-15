@@ -5,8 +5,11 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Campaigns;
 use App\Models\CampaignDetails;
+use App\Models\CampaignSubscribers;
 use App\Models\ScheduleCampaignsToProcess;
 use App\Jobs\InsertCampaignSubscribers;
+use App\Models\Lists;
+use App\Models\ListSubscribers;
 
 use CommonHelper;
 
@@ -43,6 +46,8 @@ class ScheduleEmailCampaign extends Command
      */
     public function handle()
     {
+        $this->test();
+        exit();
         $this->info('Checks if any campaign is schedule for the time then send it in queue');
         $scheduleDate = CommonHelper::getTodayDateTime();
         $campaigns = new Campaigns();
@@ -90,5 +95,57 @@ class ScheduleEmailCampaign extends Command
         }
  
         return 0;
+    }
+
+
+    function test() {
+        $a = [];
+        $c = [4,3];
+        $a['campaign_ids']  =$c;
+
+        $campaignIds = $a['campaign_ids'];
+        $scheduleCampaignsToProcess = new ScheduleCampaignsToProcess();
+        $scheduleCampaignsToProcessList = $scheduleCampaignsToProcess->getScheduledCampaignsListByStatus(ScheduleCampaignsToProcess::NOT_PICKED);
+        $listModel = new Lists();
+        $listSubscribersModel = new ListSubscribers();
+        foreach ($scheduleCampaignsToProcessList as $scheduleCampaigns) {
+            $lists = unserialize($scheduleCampaigns->lists);
+            foreach ($lists as $list) {
+                $listData = $listModel->getActiveListsById($list);
+                if ($listData->status == Lists::ACTIVE) {
+                    print_r($list);
+                    $listSubscribers = $listSubscribersModel->getListSubscribersByListId($list);
+                    $listSubscribersArr = [];
+                    foreach($listSubscribers as $listSubscriber) {
+                        unset($listSubscriber->id);
+                        $lArr = [];
+                        $lArr['list_id'] = $listSubscriber->list_id;
+                        $lArr['email'] = $listSubscriber->email;
+                        $lArr['first_name'] = $listSubscriber->first_name;
+                        $lArr['last_name'] = $listSubscriber->last_name;
+                        $lArr['phone_number'] = $listSubscriber->phone_number;
+                        $lArr['age'] = $listSubscriber->age;
+                        $lArr['gender'] = $listSubscriber->gender;
+                        $lArr['city'] = $listSubscriber->city;
+                        $lArr['file_row'] = $listSubscriber->file_row;
+                        $lArr['created_at'] = $listSubscriber->created_at;
+                        $lArr['updated_at'] = $listSubscriber->updated_at;
+                        $lArr['created_by'] = $listSubscriber->created_by;
+                        $lArr['updated_by'] = $listSubscriber->updated_by;
+                        $lArr['field_0'] = $listSubscriber->field_0;
+                        $lArr['field_1'] = $listSubscriber->field_1;
+                        $lArr['field_2'] = $listSubscriber->field_2;
+                        $lArr['field_3'] = $listSubscriber->field_3;
+                        $lArr['campaign_id'] = $scheduleCampaigns->campaign_id;
+                        array_push($listSubscribersArr, $lArr);
+                    }
+                    try {
+                        CampaignSubscribers::insert($listSubscribersArr);
+                    } catch(\Exception $e) {
+                        $this->info('Error '. $e->getMessage());
+                    }
+                }
+            }
+        }
     }
 }
