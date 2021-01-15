@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Campaigns;
 use App\Models\CampaignDetails;
+use App\Models\ScheduleCampaignsToProcess;
 use CommonHelper;
 
 class ScheduleEmailCampaign extends Command
@@ -56,14 +57,35 @@ class ScheduleEmailCampaign extends Command
             array_push($campaignIds, $campaign->id);
             $campaign->campaign_details = $campaignDetails->getCampaignDetailsById($campaign->id);
         }
-        
-        if($campaigns->updateCampaignsStatus($campaignIds)) {
-            $this->info('Campaign ids '. implode(",", $campaignIds).' send to processing queue');
-            \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' send to processing queue');
-        } else {
-            $this->info('Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
-            \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
+
+        $processCampaigns = [];
+        foreach($campaignsList as $campaign) {
+            $c = [];
+            $c['campaign_type'] = $campaign->campaign_type;
+            $c['campaign_id'] = $campaign->id;
+            $c['campaign_subject'] = $campaign->campaign_subject;
+            $c['user_id'] = $campaign->user_id;
+            $c['template_id'] = $campaign->campaign_details->template_id;
+            $c['content'] = $campaign->campaign_details->html_content;
+            $c['lists'] = $campaign->campaign_details->lists;
+            $c['created_at'] = $scheduleDate;
+            $c['updated_at'] = $scheduleDate;
+            array_push($processCampaigns, $c);
         }
+
+        try {
+            ScheduleCampaignsToProcess::insert($processCampaigns);
+            if($campaigns->updateCampaignsStatus($campaignIds)) {
+                $this->info('Campaign ids '. implode(",", $campaignIds).' send to processing queue');
+                \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' send to processing queue');
+            } else {
+                $this->info('Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
+                \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
+            }      
+        } catch(\Exception $e) {
+            $this->info('Error '. $e->getMessage());
+        }
+ 
         return 0;
     }
 }
