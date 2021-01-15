@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\Campaigns;
 use App\Models\CampaignDetails;
 use App\Models\ScheduleCampaignsToProcess;
+use App\Jobs\InsertCampaignSubscribers;
+
 use CommonHelper;
 
 class ScheduleEmailCampaign extends Command
@@ -75,13 +77,14 @@ class ScheduleEmailCampaign extends Command
 
         try {
             ScheduleCampaignsToProcess::insert($processCampaigns);
+            InsertCampaignSubscribers::dispatch(['campaign_ids' => $campaignIds])->onQueue('add_subscribers_for_campaign');
             if($campaigns->updateCampaignsStatus($campaignIds)) {
                 $this->info('Campaign ids '. implode(",", $campaignIds).' send to processing queue');
                 \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' send to processing queue');
             } else {
                 $this->info('Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
                 \Log::info("CAMPAIGN QUEUE => " . 'Campaign ids '. implode(",", $campaignIds).' not sent to processing queue');
-            }      
+            }
         } catch(\Exception $e) {
             $this->info('Error '. $e->getMessage());
         }
