@@ -7,6 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Models\CampaignSubscribers;
+use App\Models\ScheduleCampaignsToProcess;
+use App\Models\Lists;
+use App\Models\ListSubscribers;
 
 class InsertCampaignSubscribers implements ShouldQueue
 {
@@ -38,9 +42,52 @@ class InsertCampaignSubscribers implements ShouldQueue
     public function handle()
     {
         $campaignData = $this->campaignData;
-        print_r($campaignData);
+
         //$this->info('Campaign ids send to processing queue');
-        echo "44";
+        $campaignIds = $campaignData['campaign_ids'];
+        $scheduleCampaignsToProcess = new ScheduleCampaignsToProcess();
+        $scheduleCampaignsToProcessList = $scheduleCampaignsToProcess->getScheduledCampaignsListByStatus(ScheduleCampaignsToProcess::NOT_PICKED);
+        $listModel = new Lists();
+        $listSubscribersModel = new ListSubscribers();
+        foreach ($scheduleCampaignsToProcessList as $scheduleCampaigns) {
+            $lists = unserialize($scheduleCampaigns->lists);
+            foreach ($lists as $list) {
+                $listData = $listModel->getActiveListsById($list);
+                if ($listData->status == Lists::ACTIVE) {
+                    \Log::info("Inserting list id " . $list . " for sending");
+                    $listSubscribers = $listSubscribersModel->getListSubscribersByListId($list);
+                    $listSubscribersArr = [];
+                    foreach($listSubscribers as $listSubscriber) {
+                        unset($listSubscriber->id);
+                        $lArr = [];
+                        $lArr['list_id'] = $listSubscriber->list_id;
+                        $lArr['email'] = $listSubscriber->email;
+                        $lArr['first_name'] = $listSubscriber->first_name;
+                        $lArr['last_name'] = $listSubscriber->last_name;
+                        $lArr['phone_number'] = $listSubscriber->phone_number;
+                        $lArr['age'] = $listSubscriber->age;
+                        $lArr['gender'] = $listSubscriber->gender;
+                        $lArr['city'] = $listSubscriber->city;
+                        $lArr['file_row'] = $listSubscriber->file_row;
+                        $lArr['created_at'] = $listSubscriber->created_at;
+                        $lArr['updated_at'] = $listSubscriber->updated_at;
+                        $lArr['created_by'] = $listSubscriber->created_by;
+                        $lArr['updated_by'] = $listSubscriber->updated_by;
+                        $lArr['field_0'] = $listSubscriber->field_0;
+                        $lArr['field_1'] = $listSubscriber->field_1;
+                        $lArr['field_2'] = $listSubscriber->field_2;
+                        $lArr['field_3'] = $listSubscriber->field_3;
+                        $lArr['campaign_id'] = $scheduleCampaigns->campaign_id;
+                        array_push($listSubscribersArr, $lArr);
+                    }
+                    try {
+                        CampaignSubscribers::insert($listSubscribersArr);
+                    } catch(\Exception $e) {
+                        $this->info('Error '. $e->getMessage());
+                    }
+                }
+            }
+        }
         return 55;
     }
 }
