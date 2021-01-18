@@ -21,8 +21,8 @@ class ScheduleEmailCampaign extends Command
      *
      * php artisan command:scheduleemailcampaign
      * php artisan queue:listen --queue=add_subscribers_for_campaign
-     * TRUNCATE campaign_subscribers
-     * TRUNCATE schedule_campaigns_to_process
+     * TRUNCATE campaign_subscribers;
+     * TRUNCATE schedule_campaigns_to_process;
      * TRUNCATE jobs;
      * UPDATE campaigns SET status = 1 WHERE id IN (3,4);
      * @var string

@@ -11,6 +11,7 @@ use App\Models\CampaignSubscribers;
 use App\Models\ScheduleCampaignsToProcess;
 use App\Models\Lists;
 use App\Models\ListSubscribers;
+use App\Jobs\PushSubscribersInSendingQueue;
 
 class InsertCampaignSubscribers implements ShouldQueue
 {
@@ -43,6 +44,10 @@ class InsertCampaignSubscribers implements ShouldQueue
     {
         $campaignData = $this->campaignData;
 
+        $bSize = 2;
+        $batchNumber = time();
+        $batchCounter = 1;
+        $batchNumbers = [$batchNumber];
         //$this->info('Campaign ids send to processing queue');
         $campaignIds = $campaignData['campaign_ids'];
         $scheduleCampaignsToProcess = new ScheduleCampaignsToProcess();
@@ -78,6 +83,15 @@ class InsertCampaignSubscribers implements ShouldQueue
                         $lArr['field_2'] = $listSubscriber->field_2;
                         $lArr['field_3'] = $listSubscriber->field_3;
                         $lArr['campaign_id'] = $scheduleCampaigns->campaign_id;
+                        $lArr['batch_number'] = $batchNumber;
+
+                        if($batchCounter >= $bSize) {
+                            $batchNumber = $batchNumber+1;
+                            $batchCounter = 1;
+                            array_push($batchNumbers, $batchNumber);
+                        } else {
+                            $batchCounter++;
+                        }
                         array_push($listSubscribersArr, $lArr);
                     }
                     try {
@@ -90,5 +104,6 @@ class InsertCampaignSubscribers implements ShouldQueue
             \Log::info("SETTING " . ScheduleCampaignsToProcess::READY_TO_GO ." to " . $scheduleCampaigns->campaign_id);
             $scheduleCampaignsToProcess->updateCampaignsToProcessStatus(ScheduleCampaignsToProcess::READY_TO_GO, $scheduleCampaigns->campaign_id);
         }
+        PushSubscribersInSendingQueue::dispatch(['batches' => $batchNumbers])->onQueue('push_subscribers_in_sending_queue');
     }
 }
