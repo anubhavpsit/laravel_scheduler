@@ -14,6 +14,7 @@ class ScheduleCampaignsToProcess extends Model
     public const SENDING = 2;
     public const SENT = 3;
     public const FAILED = 4;
+    public const READY_TO_GO = 5;
 
     public const TYPE_EMAIL = 1;
     public const TYPE_SPLIT = 2;
@@ -28,4 +29,13 @@ class ScheduleCampaignsToProcess extends Model
 		return $results;
     }
 
+    public function updateCampaignsToProcessStatus($status=0, $campaignId=0) {
+
+        if($campaignId == 0) {
+            return false;
+        } else {
+            DB::table($this->table)->where('campaign_id',$campaignId)->update(['status' => $status]);   
+            return true;         
+        }
+    }
 }

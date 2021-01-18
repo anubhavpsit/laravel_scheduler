@@ -18,6 +18,13 @@ class ScheduleEmailCampaign extends Command
     /**
      * The name and signature of the console command.
      * php artisan command:scheduleemailcampaign
+     *
+     * php artisan command:scheduleemailcampaign
+     * php artisan queue:listen --queue=add_subscribers_for_campaign
+     * TRUNCATE campaign_subscribers
+     * TRUNCATE schedule_campaigns_to_process
+     * TRUNCATE jobs;
+     * UPDATE campaigns SET status = 1 WHERE id IN (3,4);
      * @var string
      */
     protected $signature = 'command:scheduleemailcampaign';
@@ -46,8 +53,8 @@ class ScheduleEmailCampaign extends Command
      */
     public function handle()
     {
-        $this->test();
-        exit();
+        // $this->test();
+        // exit();
         $this->info('Checks if any campaign is schedule for the time then send it in queue');
         $scheduleDate = CommonHelper::getTodayDateTime();
         $campaigns = new Campaigns();
@@ -146,6 +153,7 @@ class ScheduleEmailCampaign extends Command
                     }
                 }
             }
+            $scheduleCampaignsToProcess->updateCampaignsToProcessStatus(ScheduleCampaignsToProcess::READY_TO_GO, $scheduleCampaigns->campaign_id);
         }
     }
 }

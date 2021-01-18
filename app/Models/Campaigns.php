@@ -130,7 +130,5 @@ class Campaigns extends Model
             DB::table($this->table)->whereIn('id',$campaignIds)->update(['status' => self::SENDING]);   
             return true;         
         }
-
-
     } 
 }

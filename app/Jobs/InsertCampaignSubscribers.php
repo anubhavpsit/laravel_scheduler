@@ -87,7 +87,8 @@ class InsertCampaignSubscribers implements ShouldQueue
                     }
                 }
             }
+            \Log::info("SETTING " . ScheduleCampaignsToProcess::READY_TO_GO ." to " . $scheduleCampaigns->campaign_id);
+            $scheduleCampaignsToProcess->updateCampaignsToProcessStatus(ScheduleCampaignsToProcess::READY_TO_GO, $scheduleCampaigns->campaign_id);
         }
-        return 55;
     }
 }
