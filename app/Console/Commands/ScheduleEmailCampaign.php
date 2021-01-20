@@ -24,6 +24,7 @@ class ScheduleEmailCampaign extends Command
      * TRUNCATE campaign_subscribers;
      * TRUNCATE schedule_campaigns_to_process;
      * TRUNCATE jobs;
+     * TRUNCATE job_batches;
      * UPDATE campaigns SET status = 1 WHERE id IN (3,4);
      * @var string
      */

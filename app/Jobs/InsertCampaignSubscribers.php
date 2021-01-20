@@ -12,6 +12,8 @@ use App\Models\ScheduleCampaignsToProcess;
 use App\Models\Lists;
 use App\Models\ListSubscribers;
 use App\Jobs\PushSubscribersInSendingQueue;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
 
 class InsertCampaignSubscribers implements ShouldQueue
 {
@@ -104,6 +106,20 @@ class InsertCampaignSubscribers implements ShouldQueue
             \Log::info("SETTING " . ScheduleCampaignsToProcess::READY_TO_GO ." to " . $scheduleCampaigns->campaign_id);
             $scheduleCampaignsToProcess->updateCampaignsToProcessStatus(ScheduleCampaignsToProcess::READY_TO_GO, $scheduleCampaigns->campaign_id);
         }
-        PushSubscribersInSendingQueue::dispatch(['batches' => $batchNumbers])->onQueue('push_subscribers_in_sending_queue');
+        //PushSubscribersInSendingQueue::dispatch(['batches' => $batchNumbers])->onQueue('push_subscribers_in_sending_queue');
+        $cBatch = [];
+        foreach ($batchNumbers as $batchNumber) {
+            array_push($cBatch, new PushSubscribersInSendingQueue(['batches' => $batchNumber]));
+        }
+        $batch = Bus::batch($cBatch)->then(function (Batch $batch) {
+            // All jobs completed successfully...
+            \Log::info("SENDING IN BATCH PROCESSING");
+        })->catch(function (Batch $batch, Throwable $e) {
+            \Log::info("ERROR IN BATCH PROCESSING");
+            // First batch job failure detected...
+        })->finally(function (Batch $batch) {
+            \Log::info("BATCH PROCESSING COMPLETED");
+            // The batch has finished executing...
+        })->name('send_campaign')->allowFailures(false)->onConnection('database')->onQueue('push_subscribers_in_sending_queue')->dispatch();
     }
 }
