@@ -99,7 +99,7 @@ class InsertCampaignSubscribers implements ShouldQueue
                     try {
                         CampaignSubscribers::insert($listSubscribersArr);
                     } catch(\Exception $e) {
-                        $this->info('Error '. $e->getMessage());
+                        \Log::info('Error '. $e->getMessage());
                     }
                 }
             }
@@ -108,8 +108,8 @@ class InsertCampaignSubscribers implements ShouldQueue
         }
         //PushSubscribersInSendingQueue::dispatch(['batches' => $batchNumbers])->onQueue('push_subscribers_in_sending_queue');
         $cBatch = [];
-        foreach ($batchNumbers as $batchNumber) {
-            array_push($cBatch, new PushSubscribersInSendingQueue(['batches' => $batchNumber]));
+        foreach ($batchNumbers as $batcId) {
+            array_push($cBatch, new PushSubscribersInSendingQueue(['batches' => $batcId]));
         }
         $batch = Bus::batch($cBatch)->then(function (Batch $batch) {
             // All jobs completed successfully...
