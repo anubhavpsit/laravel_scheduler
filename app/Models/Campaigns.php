@@ -131,4 +131,14 @@ class Campaigns extends Model
             return true;         
         }
     } 
+
+    public function getCampaignDataById($campaignId) {
+
+        $query = DB::table($this->table)->join('campaign_details', 'campaigns.id', '=', 'campaign_details.campaign_id');
+        $query->where('campaigns.id', $campaignId)->select('campaigns.*', 'campaign_details.template_id', 'campaign_details.html_content');
+
+        $results = $query->get()->first();
+        return $results;
+    }
+
 }
