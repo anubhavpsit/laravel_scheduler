@@ -141,7 +141,7 @@ class Campaigns extends Model
         return $results;
     }
 
-    public function addEmailTrackingPixel($listId, $campaignId, $emailId) {
+    public function createTrackingPixel($listId, $campaignId, $emailId) {
         // http://localhost:3001/{encoded_email}/test.png
         // http://localhost:3001/NA==#dGVzdEBnbWFpbC5jb20=#MzI=/m4u.gif
         $trackingUrl = "http://localhost:3001";
@@ -150,7 +150,11 @@ class Campaigns extends Model
         // $emailId = base64_encode($emailId);
         $url = $trackingUrl."/".base64_encode($campaignId."#".$listId."#".$emailId)."/m4u.gif";
         //http://localhost:3001/NA==#dGVzdEBnbWFpbC5jb20=#MzI=/m4u.gif
-        return $url;
+        return "<img src='".$url."' width='1px' height='1px' />";
+    }
+
+    public function addTrackingPixel($htmlContent, $pixelTag) {
+        return $htmlContent." ".$pixelTag;
     }
 
 }
