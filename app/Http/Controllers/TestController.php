@@ -59,10 +59,14 @@ class TestController extends Controller
         }
 
 
-
+        //echo addEmailTrackingPixel('4', '32', 'test@gmail.com');
         echo "<pre>";
         foreach($batchData as $bData) {
-            print_r($bData);            
+            //print_r($bData->campaign_id);
+            print_r($lists[$bData->list_id]);
+            
+            //print_r($campaignsData[$bData->campaign_id]);
+
         }
 
     }

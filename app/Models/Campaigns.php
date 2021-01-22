@@ -141,4 +141,16 @@ class Campaigns extends Model
         return $results;
     }
 
+    public function addEmailTrackingPixel($listId, $campaignId, $emailId) {
+        // http://localhost:3001/{encoded_email}/test.png
+        // http://localhost:3001/NA==#dGVzdEBnbWFpbC5jb20=#MzI=/m4u.gif
+        $trackingUrl = "http://localhost:3001";
+        // $listId = base64_encode($listId);
+        // $campaignId = base64_encode($campaignId);
+        // $emailId = base64_encode($emailId);
+        $url = $trackingUrl."/".base64_encode($campaignId."#".$listId."#".$emailId)."/m4u.gif";
+        //http://localhost:3001/NA==#dGVzdEBnbWFpbC5jb20=#MzI=/m4u.gif
+        return $url;
+    }
+
 }
