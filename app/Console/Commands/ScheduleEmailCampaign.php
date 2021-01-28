@@ -56,6 +56,7 @@ class ScheduleEmailCampaign extends Command
     {
         // $this->test();
         // exit();
+        $trackingLink = "http://localhost:3000/";
         $this->info('Checks if any campaign is schedule for the time then send it in queue');
         $scheduleDate = CommonHelper::getTodayDateTime();
         $campaigns = new Campaigns();
@@ -81,11 +82,46 @@ class ScheduleEmailCampaign extends Command
             $c['campaign_subject'] = $campaign->campaign_subject;
             $c['user_id'] = $campaign->user_id;
             $c['template_id'] = $campaign->campaign_details->template_id;
-            $c['content'] = $campaign->campaign_details->html_content;
             $c['lists'] = $campaign->campaign_details->lists;
             $c['created_at'] = $scheduleDate;
             $c['updated_at'] = $scheduleDate;
+            $c['campaign_links'] = null;
+            $htmlDom = new \DOMDocument;
+            $htmlDom->loadHTML($campaign->campaign_details->html_content);
+            $links = $htmlDom->getElementsByTagName('a');
+            $extractedLinks = array();
+            $validLinks = [];
+            $linkNumber = 1;
+            foreach ($links as $link) {
+                $linkText = $link->nodeValue;
+                $linkHref = $link->getAttribute('href');
+                // print_r($linkText);
+                // print_r($linkHref);
+                // print_r($linkHref);
+                if(($linkHref == '#') || ($linkHref == 'javascript:void(0)') || ($linkHref == 'javascript:void(0);')){
+                    continue;
+                } else {
+                    if(!in_array($linkHref, $validLinks)) {
+                        $validLinks[$linkNumber] = $linkHref;
+                        $linkNumber++;
+                    }  
+                }
+            }
+
+            foreach ($links as $link) {
+                $key = array_search($link->getAttribute('href'), $validLinks);
+                if($key) {
+                    $link->setAttribute('href', $trackingLink.$key); 
+                }
+            }
+            $campaign->campaign_details->html_content = $htmlDom->saveHTML();
+            $c['content'] = $campaign->campaign_details->html_content;
+            if(!empty($validLinks)) {
+                $c['campaign_links'] = json_encode($validLinks);
+            }
             array_push($processCampaigns, $c);
+
+
         }
 
         try {
