@@ -66,7 +66,7 @@ class TestController extends Controller
 
 
         //echo addEmailTrackingPixel('4', '32', 'test@gmail.com');
-        echo "<pre>";
+        //echo "<pre>";
         //print_r($lists);
         foreach($batchData as $bData) {
             //print_r($lists[$bData->list_id]);
@@ -77,7 +77,7 @@ class TestController extends Controller
             //$c = $campaignsData[$bData->campaign_id]->content;
             $content = $campaigns->addTrackingPixel($campaignsData[$bData->campaign_id]->content, $pixel);
 
-            $content = $campaignLinks->addTrackingLinks($campaignsData[$bData->campaign_id]->content, $bData->list_id, $bData->campaign_id, $bData->email);
+            $content = $campaignLinks->addTrackingLinks($content, $bData->list_id, $bData->campaign_id, $bData->email);
 
             $listPersonalizations = json_decode($lists[$bData->list_id]);
             preg_match_all('(\{\w+[, fallback=\w]+\})', $content, $matches);
