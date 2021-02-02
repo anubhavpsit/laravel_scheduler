@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 02, 2021 at 04:38 AM
+-- Generation Time: Feb 02, 2021 at 01:36 PM
 -- Server version: 10.3.20-MariaDB
 -- PHP Version: 7.3.12
 
@@ -148,8 +148,8 @@ CREATE TABLE IF NOT EXISTS `campaigns` (
 INSERT INTO `campaigns` (`id`, `campaign_type`, `campaign_name`, `campaign_subject`, `is_scheduled`, `scheduled_at`, `status`, `user_id`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Test Abd', 'Test Subject Line 1', 0, NULL, 3, 1, '2020-07-07 15:30:26', '2020-07-07 15:30:26'),
 (2, 2, 'T22AA', 'Test', 0, NULL, 0, 1, '2020-07-15 05:10:43', '2020-07-15 05:10:43'),
-(3, 1, 'T22', 'TEST', 1, '2021-01-13 12:32:21', 1, 1, '2020-08-13 07:30:10', '2020-08-13 07:30:10'),
-(4, 1, 'sdfdsfdsfdsfdsfsd', 'sdfsfdsfs', 1, '2021-01-13 12:32:21', 1, 1, '2020-10-05 17:32:21', '2020-10-05 17:32:21'),
+(3, 1, 'T22', 'TEST', 1, '2021-01-13 12:32:21', 2, 1, '2020-08-13 07:30:10', '2020-08-13 07:30:10'),
+(4, 1, 'sdfdsfdsfdsfdsfsd', 'sdfsfdsfs', 1, '2021-01-13 12:32:21', 2, 1, '2020-10-05 17:32:21', '2020-10-05 17:32:21'),
 (5, 1, 'sdfsdfdsfdsfds', 'sdfsfsdfs', 0, NULL, 1, 1, '2020-10-05 17:32:43', '2020-10-05 17:32:43'),
 (6, 1, 'wererwerew', 'werwrew', 0, NULL, 3, 1, '2020-10-05 17:33:01', '2020-10-05 17:33:01');
 
@@ -197,7 +197,15 @@ CREATE TABLE IF NOT EXISTS `campaign_links` (
   `campaign_links` text DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 0 COMMENT 'inactive => ''0'', active=>''1''',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `campaign_links`
+--
+
+INSERT INTO `campaign_links` (`id`, `campaign_id`, `campaign_links`, `status`) VALUES
+(8, 3, '{\"1\":\"http:\\/\\/www.google.com\",\"2\":\"https:\\/\\/www.w3schools.com\\/\"}', 1),
+(7, 4, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -229,7 +237,21 @@ CREATE TABLE IF NOT EXISTS `campaign_subscribers` (
   `field_2` varchar(255) DEFAULT NULL,
   `field_3` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `campaign_subscribers`
+--
+
+INSERT INTO `campaign_subscribers` (`id`, `campaign_id`, `list_id`, `batch_number`, `email`, `first_name`, `last_name`, `phone_number`, `age`, `gender`, `city`, `status`, `file_row`, `created_at`, `updated_at`, `created_by`, `updated_by`, `field_0`, `field_1`, `field_2`, `field_3`) VALUES
+(1, 3, 177, '1612241094', 'anubhav04@gmail.com', 'Anubhav04', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'agra', NULL),
+(2, 3, 177, '1612241094', 'anubhav03@gmail.com', 'Anubhav03', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'noida', NULL),
+(3, 3, 177, '1612241095', 'anubhav02@gmail.com', 'Anubhav02', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'lucknow', NULL),
+(4, 3, 177, '1612241095', 'anubhav01@gmail.com', 'Anubhav01', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'kanpur', NULL),
+(5, 4, 177, '1612241096', 'anubhav04@gmail.com', 'Anubhav04', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'agra', NULL),
+(6, 4, 177, '1612241096', 'anubhav03@gmail.com', 'Anubhav03', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'noida', NULL),
+(7, 4, 177, '1612241097', 'anubhav02@gmail.com', 'Anubhav02', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'lucknow', NULL),
+(8, 4, 177, '1612241097', 'anubhav01@gmail.com', 'Anubhav01', NULL, NULL, NULL, NULL, NULL, 0, NULL, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL, NULL, NULL, 'kanpur', NULL);
 
 -- --------------------------------------------------------
 
@@ -247,18 +269,29 @@ CREATE TABLE IF NOT EXISTS `campaign_tracker` (
   `other_info` text DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 0,
   `opened_at` datetime DEFAULT NULL,
+  `opened_link` text DEFAULT NULL,
+  `action` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `campaign_tracker`
 --
 
-INSERT INTO `campaign_tracker` (`id`, `campaign_id`, `list_id`, `subscriber_email`, `useragent`, `other_info`, `status`, `opened_at`) VALUES
-(1, 32, 4, 'test@gmail.com', '[object Object]', '[object Object]', 0, NULL),
-(2, 32, 4, 'test@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '[object Object]', 0, NULL),
-(3, 32, 4, 'test@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"32\",\"subscriber_email\":\"test@gmail.com\",\"list_id\":\"4\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, NULL),
-(4, 32, 4, 'test@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"32\",\"subscriber_email\":\"test@gmail.com\",\"list_id\":\"4\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-01-22 14:57:46');
+INSERT INTO `campaign_tracker` (`id`, `campaign_id`, `list_id`, `subscriber_email`, `useragent`, `other_info`, `status`, `opened_at`, `opened_link`, `action`) VALUES
+(1, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:45:05', NULL, 'click'),
+(2, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:48:24', NULL, 'click'),
+(3, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:49:20', NULL, 'click'),
+(4, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:50:12', NULL, 'click'),
+(5, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:50:37', NULL, 'click'),
+(6, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:51:32', NULL, 'click'),
+(7, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:52:22', NULL, 'click'),
+(8, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:53:09', NULL, 'click'),
+(9, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 18:53:59', NULL, 'click'),
+(10, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:30', NULL, 'open'),
+(11, 3, 177, 'anubhav04@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav04@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:30', NULL, 'open'),
+(12, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:40', 'http://www.google.com', 'click'),
+(13, 3, 177, 'anubhav04@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav04@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:50', 'https://www.w3schools.com/', 'click');
 
 -- --------------------------------------------------------
 
@@ -589,7 +622,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `created_at` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   KEY `jobs_queue_index` (`queue`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -654,6 +687,13 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
   `finished_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `job_batches`
+--
+
+INSERT INTO `job_batches` (`id`, `name`, `total_jobs`, `pending_jobs`, `failed_jobs`, `failed_job_ids`, `options`, `cancelled_at`, `created_at`, `finished_at`) VALUES
+('92a1e9c6-988c-47a6-9f43-b519dddff371', 'send_campaign', 5, 0, 0, '[]', 'a:6:{s:4:\"then\";a:1:{i:0;C:36:\"Illuminate\\Queue\\SerializableClosure\":366:{@BnlEx6+8+tuiYvDLnlF4Nk3dxuAlZkizRynp/B0AMlI=.a:5:{s:3:\"use\";a:0:{}s:8:\"function\";s:156:\"function (\\Illuminate\\Bus\\Batch $batch) {\n            // All jobs completed successfully...\n            \\Log::info(\"SENDING IN BATCH PROCESSING\");\n        }\";s:5:\"scope\";s:34:\"App\\Jobs\\InsertCampaignSubscribers\";s:4:\"this\";N;s:4:\"self\";s:32:\"0000000052be2b64000000000bdc70f8\";}}}s:5:\"catch\";a:1:{i:0;C:36:\"Illuminate\\Queue\\SerializableClosure\":389:{@7pf3+dd6ewHylM12wyQGpNd3IfmallVSg4mhZHsWtJM=.a:5:{s:3:\"use\";a:0:{}s:8:\"function\";s:179:\"function (\\Illuminate\\Bus\\Batch $batch, \\App\\Jobs\\Throwable $e) {\n            \\Log::info(\"ERROR IN BATCH PROCESSING\");\n            // First batch job failure detected...\n        }\";s:5:\"scope\";s:34:\"App\\Jobs\\InsertCampaignSubscribers\";s:4:\"this\";N;s:4:\"self\";s:32:\"0000000052be2b62000000000bdc70f8\";}}}s:7:\"finally\";a:1:{i:0;C:36:\"Illuminate\\Queue\\SerializableClosure\":366:{@ahCj64kyf+nNafwFYMYClE0h4vflXKq4L/mh3HsYT0I=.a:5:{s:3:\"use\";a:0:{}s:8:\"function\";s:156:\"function (\\Illuminate\\Bus\\Batch $batch) {\n            \\Log::info(\"BATCH PROCESSING COMPLETED\");\n            // The batch has finished executing...\n        }\";s:5:\"scope\";s:34:\"App\\Jobs\\InsertCampaignSubscribers\";s:4:\"this\";N;s:4:\"self\";s:32:\"0000000052be2b60000000000bdc70f8\";}}}s:13:\"allowFailures\";b:0;s:10:\"connection\";s:8:\"database\";s:5:\"queue\";s:33:\"push_subscribers_in_sending_queue\";}', NULL, 1612241095, 1612241214);
 
 -- --------------------------------------------------------
 
@@ -945,7 +985,7 @@ INSERT INTO `list_personalization_info` (`id`, `list_id`, `list_personalizations
 (1, 173, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"}]', 1, '2020-04-22 16:16:51', '2020-04-22 16:16:51', NULL, NULL),
 (2, 174, '[{\"index\":0,\"personlized_field\":\"{last_name, fallback=}\",\"db_field\":\"last_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"}]', 1, '2020-04-23 04:16:23', '2020-04-23 04:16:23', NULL, NULL),
 (3, 175, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"}]', 1, '2020-04-27 15:57:18', '2020-04-27 15:57:18', NULL, NULL),
-(4, 177, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"},{\"index\":2,\"personlized_field\":\"{city, fallback=}\",\"db_field\":\"field_2\"}]', 1, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL),
+(4, 177, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"},{\"index\":2,\"personlized_field\":\"{city, fallback=abc}\",\"db_field\":\"field_2\"}]', 1, '2020-07-07 13:56:01', '2020-07-07 13:56:01', NULL, NULL),
 (5, 196, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"},{\"index\":2,\"personlized_field\":\"{city, fallback=}\",\"db_field\":\"city\"}]', 1, '2020-08-05 18:00:59', '2020-08-05 18:00:59', NULL, NULL),
 (6, 197, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"},{\"index\":2,\"personlized_field\":\"{city, fallback=}\",\"db_field\":\"city\"}]', 1, '2020-08-05 18:01:36', '2020-08-05 18:01:36', NULL, NULL),
 (7, 198, '[{\"index\":0,\"personlized_field\":\"{first_name, fallback=}\",\"db_field\":\"first_name\"},{\"index\":1,\"personlized_field\":\"{email, fallback=}\",\"db_field\":\"email\"}]', 1, '2020-08-05 18:09:16', '2020-08-05 18:09:16', NULL, NULL),
@@ -1735,7 +1775,15 @@ CREATE TABLE IF NOT EXISTS `schedule_campaigns_to_process` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `campaign_id` (`campaign_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `schedule_campaigns_to_process`
+--
+
+INSERT INTO `schedule_campaigns_to_process` (`id`, `campaign_id`, `campaign_type`, `campaign_subject`, `status`, `user_id`, `template_id`, `content`, `lists`, `campaign_links`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, 'sdfsfdsfs', 5, 1, 8, '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body><b>Testing</b></body></html>\n', 'a:1:{i:0;s:3:\"177\";}', NULL, '2021-02-02 04:44:22', '2021-02-02 04:44:22'),
+(2, 3, 1, 'TEST', 5, 1, 3, '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\r\n<html><body><p>Hii {city, fallback=abc} I am here to ask you to visit <a href=\"http://localhost:3000/1\">Open Google</a> and <a href=\"http://localhost:3000/2\">Open W3 Schools</a> revised  <a href=\"http://localhost:3000/1\">Open Google 2 </a> Or  <a href=\"#\">Open Google 3</a> <a href=\"javascript:void(0)\">Open Google 4</a><a href=\"javascript:void(0);\">Open Google 5</a>.</p></body></html>', 'a:1:{i:0;s:3:\"177\";}', '{\"1\":\"http:\\/\\/www.google.com\",\"2\":\"https:\\/\\/www.w3schools.com\\/\"}', '2021-02-02 04:44:22', '2021-02-02 04:44:22');
 
 -- --------------------------------------------------------
 
