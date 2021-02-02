@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 28, 2021 at 09:10 AM
+-- Generation Time: Feb 02, 2021 at 04:38 AM
 -- Server version: 10.3.20-MariaDB
 -- PHP Version: 7.3.12
 
@@ -148,8 +148,8 @@ CREATE TABLE IF NOT EXISTS `campaigns` (
 INSERT INTO `campaigns` (`id`, `campaign_type`, `campaign_name`, `campaign_subject`, `is_scheduled`, `scheduled_at`, `status`, `user_id`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Test Abd', 'Test Subject Line 1', 0, NULL, 3, 1, '2020-07-07 15:30:26', '2020-07-07 15:30:26'),
 (2, 2, 'T22AA', 'Test', 0, NULL, 0, 1, '2020-07-15 05:10:43', '2020-07-15 05:10:43'),
-(3, 1, 'T22', 'TEST', 1, '2021-01-13 12:32:21', 2, 1, '2020-08-13 07:30:10', '2020-08-13 07:30:10'),
-(4, 1, 'sdfdsfdsfdsfdsfsd', 'sdfsfdsfs', 1, '2021-01-13 12:32:21', 2, 1, '2020-10-05 17:32:21', '2020-10-05 17:32:21'),
+(3, 1, 'T22', 'TEST', 1, '2021-01-13 12:32:21', 1, 1, '2020-08-13 07:30:10', '2020-08-13 07:30:10'),
+(4, 1, 'sdfdsfdsfdsfdsfsd', 'sdfsfdsfs', 1, '2021-01-13 12:32:21', 1, 1, '2020-10-05 17:32:21', '2020-10-05 17:32:21'),
 (5, 1, 'sdfsdfdsfdsfds', 'sdfsfsdfs', 0, NULL, 1, 1, '2020-10-05 17:32:43', '2020-10-05 17:32:43'),
 (6, 1, 'wererwerew', 'werwrew', 0, NULL, 3, 1, '2020-10-05 17:33:01', '2020-10-05 17:33:01');
 
@@ -183,6 +183,21 @@ INSERT INTO `campaign_details` (`id`, `campaign_id`, `template_id`, `html_conten
 (4, 4, 8, '<b>Testing</b>', 'a:1:{i:0;s:3:\"177\";}', 1, '2020-10-05 17:32:21', '2020-10-05 17:32:21'),
 (5, 5, 8, '<b>Testing</b>', 'a:1:{i:0;s:3:\"177\";}', 1, '2020-10-05 17:32:43', '2020-10-05 17:32:43'),
 (6, 6, 5, '<b>Testing</b>', 'a:1:{i:0;s:3:\"177\";}', 1, '2020-10-05 17:33:01', '2020-10-05 17:33:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `campaign_links`
+--
+
+DROP TABLE IF EXISTS `campaign_links`;
+CREATE TABLE IF NOT EXISTS `campaign_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `campaign_id` int(11) DEFAULT NULL,
+  `campaign_links` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0 COMMENT 'inactive => ''0'', active=>''1''',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -574,15 +589,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `created_at` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   KEY `jobs_queue_index` (`queue`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `jobs`
---
-
-INSERT INTO `jobs` (`id`, `queue`, `payload`, `attempts`, `reserved_at`, `available_at`, `created_at`) VALUES
-(1, 'add_subscribers_for_campaign', '{\"uuid\":\"2f20a033-8873-43ca-82af-a14bafb55421\",\"displayName\":\"App\\\\Jobs\\\\InsertCampaignSubscribers\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\InsertCampaignSubscribers\",\"command\":\"O:34:\\\"App\\\\Jobs\\\\InsertCampaignSubscribers\\\":11:{s:15:\\\"\\u0000*\\u0000campaignData\\\";a:1:{s:12:\\\"campaign_ids\\\";a:2:{i:0;i:4;i:1;i:3;}}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";s:28:\\\"add_subscribers_for_campaign\\\";s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, 1611824955, 1611824955),
-(2, 'add_subscribers_for_campaign', '{\"uuid\":\"2698a4e8-94e7-4e57-b417-f4e75785bd58\",\"displayName\":\"App\\\\Jobs\\\\InsertCampaignSubscribers\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\InsertCampaignSubscribers\",\"command\":\"O:34:\\\"App\\\\Jobs\\\\InsertCampaignSubscribers\\\":11:{s:15:\\\"\\u0000*\\u0000campaignData\\\";a:1:{s:12:\\\"campaign_ids\\\";a:0:{}}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";s:28:\\\"add_subscribers_for_campaign\\\";s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, 1611824957, 1611824957);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1728,15 +1735,7 @@ CREATE TABLE IF NOT EXISTS `schedule_campaigns_to_process` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `campaign_id` (`campaign_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `schedule_campaigns_to_process`
---
-
-INSERT INTO `schedule_campaigns_to_process` (`id`, `campaign_id`, `campaign_type`, `campaign_subject`, `status`, `user_id`, `template_id`, `content`, `lists`, `campaign_links`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, 'sdfsfdsfs', 0, 1, 8, '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body><b>Testing</b></body></html>\n', 'a:1:{i:0;s:3:\"177\";}', NULL, '2021-01-28 09:09:12', '2021-01-28 09:09:12'),
-(2, 3, 1, 'TEST', 0, 1, 3, '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body><p>Hi {city, fallback=} I am here to ask you to visit <a href=\"http://localhost:3000/1\">Open Google</a> and <a href=\"http://localhost:3000/2\">Open W3 Schools</a> revised  <a href=\"http://localhost:3000/1\">Open Google 2 </a> Or  <a href=\"#\">Open Google 3</a> <a href=\"javascript:void(0)\">Open Google 4</a><a href=\"javascript:void(0);\">Open Google 5</a>.</p></body></html>\n', 'a:1:{i:0;s:3:\"177\";}', '{\"1\":\"http:\\/\\/www.google.com\",\"2\":\"https:\\/\\/www.w3schools.com\\/\"}', '2021-01-28 09:09:12', '2021-01-28 09:09:12');
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
