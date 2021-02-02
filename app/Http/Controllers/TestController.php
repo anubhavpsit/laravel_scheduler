@@ -78,6 +78,22 @@ class TestController extends Controller
             $content = $campaigns->addTrackingPixel($campaignsData[$bData->campaign_id]->content, $pixel);
 
             $content = $campaignLinks->addTrackingLinks($campaignsData[$bData->campaign_id]->content, $bData->list_id, $bData->campaign_id, $bData->email);
+
+            $listPersonalizations = json_decode($lists[$bData->list_id]);
+            preg_match_all('(\{\w+[, fallback=\w]+\})', $content, $matches);
+            foreach($matches[0] as $m) {
+                foreach($listPersonalizations as $listPersonalization){
+                    if($m == $listPersonalization->personlized_field) {
+                        $key = explode(",", str_replace(["{","}"], "", $m));
+                        if(!isset($bData->{$listPersonalization->db_field}) || $bData->{$listPersonalization->db_field}=='') {
+                            $replace_value = explode("=", $key[1])[1]; // setting fallback value here
+                        } else {
+                            $replace_value = $bData->{$listPersonalization->db_field}; // setting db value here
+                        }
+                        $content = str_replace($m, $replace_value, $content);
+                    }
+                }
+            }
             print_r($content);
         }
 
