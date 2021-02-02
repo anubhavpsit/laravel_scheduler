@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Campaigns;
 use App\Models\CampaignDetails;
+use App\Models\CampaignLinks;
 use App\Models\CampaignSubscribers;
 use App\Models\ScheduleCampaignsToProcess;
 use App\Jobs\InsertCampaignSubscribers;
@@ -26,6 +27,7 @@ class ScheduleEmailCampaign extends Command
      * TRUNCATE jobs;
      * TRUNCATE job_batches;
      * UPDATE campaigns SET status = 1 WHERE id IN (3,4);
+     * DELETE FROM campaign_links WHERE campaign_id in(3,4);
      * @var string
      */
     protected $signature = 'command:scheduleemailcampaign';
@@ -75,6 +77,7 @@ class ScheduleEmailCampaign extends Command
         }
 
         $processCampaigns = [];
+        $campaignLinks = [];
         foreach($campaignsList as $campaign) {
             $c = [];
             $c['campaign_type'] = $campaign->campaign_type;
@@ -120,12 +123,14 @@ class ScheduleEmailCampaign extends Command
                 $c['campaign_links'] = json_encode($validLinks);
             }
             array_push($processCampaigns, $c);
+            array_push($campaignLinks, ['campaign_id' => $c['campaign_id'], 'campaign_links' => $c['campaign_links'], 'status' => CampaignLinks::ACTIVE]);
 
 
         }
 
         try {
             ScheduleCampaignsToProcess::insert($processCampaigns);
+            CampaignLinks::insert($campaignLinks);
             InsertCampaignSubscribers::dispatch(['campaign_ids' => $campaignIds])->onQueue('add_subscribers_for_campaign');
             if($campaigns->updateCampaignsStatus($campaignIds)) {
                 $this->info('Campaign ids '. implode(",", $campaignIds).' send to processing queue');
