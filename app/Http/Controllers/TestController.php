@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Campaigns;
+use App\Models\CampaignLinks;
 use App\Models\CampaignSubscribers;
 use App\Models\ListPersonalizationInfo;
+use App\Models\ScheduleCampaignsToProcess;
 
 class TestController extends Controller
 {
@@ -31,9 +33,13 @@ class TestController extends Controller
     }
 
     public function test() {
-        $batchId = 1611141000;
+        $batchId = 1612241094;
+        //$batchId = 1612241096;
         
         $campaigns = new Campaigns();
+        $scheduledCampaigns = new ScheduleCampaignsToProcess();
+
+        $campaignLinks = new CampaignLinks();
         $campaignSubscribers = new CampaignSubscribers();
         $batchData = $campaignSubscribers->getBatchData($batchId);
         
@@ -55,7 +61,7 @@ class TestController extends Controller
         }
 
         foreach($batchCampaigns as $batchCampaign) {
-            $campaignsData[$batchCampaign->campaign_id] = $campaigns->getCampaignDataById($batchCampaign->campaign_id);
+            $campaignsData[$batchCampaign->campaign_id] = $scheduledCampaigns->getCampaignDataById($batchCampaign->campaign_id);
         }
 
 
@@ -65,14 +71,14 @@ class TestController extends Controller
         foreach($batchData as $bData) {
             //print_r($lists[$bData->list_id]);
             //($bData->list_id, $bData->campaign_id, $bData->email)
-            //print_r($campaignsData[$bData->campaign_id]->html_content);
+            //print_r($campaignsData[$bData->campaign_id]->content);
 
             $pixel = $campaigns->createTrackingPixel($bData->list_id, $bData->campaign_id, $bData->email);
-            //$c = $campaignsData[$bData->campaign_id]->html_content;
-            $content = $campaigns->addTrackingPixel($campaignsData[$bData->campaign_id]->html_content, $pixel);
-            //print_r($content);
-            //$campaignsData[$bData->campaign_id]->html_content = $campaigns->addTrackingPixel($bData->list_id, $bData->campaign_id, $bData->email);
-            //print_r($campaignsData[$bData->campaign_id]);
+            //$c = $campaignsData[$bData->campaign_id]->content;
+            $content = $campaigns->addTrackingPixel($campaignsData[$bData->campaign_id]->content, $pixel);
+
+            $content = $campaignLinks->addTrackingLinks($campaignsData[$bData->campaign_id]->content, $bData->list_id, $bData->campaign_id, $bData->email);
+            print_r($content);
         }
 
     }

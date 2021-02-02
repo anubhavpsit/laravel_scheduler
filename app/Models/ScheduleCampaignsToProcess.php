@@ -38,4 +38,13 @@ class ScheduleCampaignsToProcess extends Model
             return true;         
         }
     }
+
+    public function getCampaignDataById($campaignId) {
+
+        $query = DB::table($this->table);
+        $query->where('campaign_id', $campaignId)->select('*');
+
+        $results = $query->get()->first();
+        return $results;
+    }
 }
