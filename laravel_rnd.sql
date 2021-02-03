@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 02, 2021 at 01:36 PM
+-- Generation Time: Feb 03, 2021 at 09:51 AM
 -- Server version: 10.3.20-MariaDB
 -- PHP Version: 7.3.12
 
@@ -5899,6 +5899,32 @@ CREATE TABLE IF NOT EXISTS `tiny_domain` (
 INSERT INTO `tiny_domain` (`id`, `domain`, `status`) VALUES
 (1, 'bit.ly', 1),
 (2, 'rit.ly', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `unsubscribes`
+--
+
+DROP TABLE IF EXISTS `unsubscribes`;
+CREATE TABLE IF NOT EXISTS `unsubscribes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `list_id` int(11) DEFAULT NULL,
+  `campaign_id` int(11) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0 COMMENT 'subscribed => ''0'', unsubscribed => ''1''',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `unsubscribes`
+--
+
+INSERT INTO `unsubscribes` (`id`, `list_id`, `campaign_id`, `email`, `status`, `created_at`, `updated_at`) VALUES
+(1, 177, 3, 'anubhav@gmail.comss', 0, NULL, NULL),
+(2, 177, 3, 'anubhav@gmail.com', 1, '2021-02-03 15:16:51', '2021-02-03 15:16:51');
 
 -- --------------------------------------------------------
 
