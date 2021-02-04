@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 03, 2021 at 09:51 AM
+-- Generation Time: Feb 04, 2021 at 02:01 PM
 -- Server version: 10.3.20-MariaDB
 -- PHP Version: 7.3.12
 
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `campaign_tracker` (
   `opened_link` text DEFAULT NULL,
   `action` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `campaign_tracker`
@@ -291,7 +291,8 @@ INSERT INTO `campaign_tracker` (`id`, `campaign_id`, `list_id`, `subscriber_emai
 (10, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:30', NULL, 'open'),
 (11, 3, 177, 'anubhav04@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav04@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:30', NULL, 'open'),
 (12, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:40', 'http://www.google.com', 'click'),
-(13, 3, 177, 'anubhav04@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav04@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:50', 'https://www.w3schools.com/', 'click');
+(13, 3, 177, 'anubhav04@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav04@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-02 19:05:50', 'https://www.w3schools.com/', 'click'),
+(14, 3, 177, 'anubhav03@gmail.com', '{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}', '{\"campaign_id\":\"3\",\"subscriber_email\":\"anubhav03@gmail.com\",\"list_id\":\"177\",\"useragent\":{\"browser\":{\"name\":\"chrome\",\"version\":[88,0,4324,104],\"versionString\":\"88.0.4324.104\"},\"os\":{\"name\":\"windows\",\"version\":[10,0],\"versionString\":\"10.0\"},\"device\":{\"name\":\"Unknown\",\"version\":[],\"versionString\":\"Unknown\"}}}', 0, '2021-02-04 15:43:47', 'http://www.google.com', 'click');
 
 -- --------------------------------------------------------
 
@@ -5912,19 +5913,28 @@ CREATE TABLE IF NOT EXISTS `unsubscribes` (
   `list_id` int(11) DEFAULT NULL,
   `campaign_id` int(11) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 0 COMMENT 'subscribed => ''0'', unsubscribed => ''1''',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `unsubscribes`
 --
 
-INSERT INTO `unsubscribes` (`id`, `list_id`, `campaign_id`, `email`, `status`, `created_at`, `updated_at`) VALUES
-(1, 177, 3, 'anubhav@gmail.comss', 0, NULL, NULL),
-(2, 177, 3, 'anubhav@gmail.com', 1, '2021-02-03 15:16:51', '2021-02-03 15:16:51');
+INSERT INTO `unsubscribes` (`id`, `list_id`, `campaign_id`, `email`, `reason`, `status`, `created_at`, `updated_at`) VALUES
+(1, 177, 3, 'anubhav@gmail.comss', NULL, 0, NULL, NULL),
+(2, 177, 3, 'anubhav@gmail.coms', NULL, 1, '2021-02-03 15:16:51', '2021-02-03 15:16:51'),
+(3, 177, 3, 'anubhav@gmail.comaaa', NULL, 1, '2021-02-04 18:55:42', '2021-02-04 18:55:42'),
+(4, 177, 3, 'anubhav@gmail.comssss', NULL, 1, '2021-02-04 18:56:55', '2021-02-04 18:56:55'),
+(5, 177, 3, 'anubhav@gmail.comd', NULL, 1, '2021-02-04 18:57:43', '2021-02-04 18:57:43'),
+(6, 177, 3, 'anubhav@gmail.comasdad', NULL, 1, '2021-02-04 19:24:01', '2021-02-04 19:24:01'),
+(7, 177, 3, 'anubhav@gmail.comssss', NULL, 1, '2021-02-04 19:25:40', '2021-02-04 19:25:40'),
+(8, 177, 3, 'anubhav@gmail.comss', 'asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad sd sa asdad s.', 1, '2021-02-04 19:29:46', '2021-02-04 19:29:46'),
+(9, 177, 3, 'anubhav@gmail.comssa', 'I dont\' want to receive.', 1, '2021-02-04 19:30:04', '2021-02-04 19:30:04'),
+(10, 177, 3, 'anubhav@gmail.com', NULL, 1, '2021-02-04 19:30:21', '2021-02-04 19:30:21');
 
 -- --------------------------------------------------------
 
