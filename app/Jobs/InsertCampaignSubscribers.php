@@ -24,6 +24,10 @@ class InsertCampaignSubscribers implements ShouldQueue
     /*
     Queue => add_subscribers_for_campaign
     Payload => {"uuid":"de2e9334-ca61-4084-a6ac-42d36aac5b4d","displayName":"App\\Jobs\\InsertCampaignSubscribers","job":"Illuminate\\Queue\\CallQueuedHandler@call","maxTries":null,"maxExceptions":null,"delay":null,"timeout":null,"timeoutAt":null,"data":{"commandName":"App\\Jobs\\InsertCampaignSubscribers","command":"O:34:\"App\\Jobs\\InsertCampaignSubscribers\":9:{s:15:\"\u0000*\u0000campaignData\";a:1:{s:12:\"campaign_ids\";a:2:{i:0;i:4;i:1;i:3;}}s:3:\"job\";N;s:10:\"connection\";N;s:5:\"queue\";s:28:\"add_subscribers_for_campaign\";s:15:\"chainConnection\";N;s:10:\"chainQueue\";N;s:5:\"delay\";N;s:10:\"middleware\";a:0:{}s:7:\"chained\";a:0:{}}"}}
+
+
+{"uuid":"899f9cd5-9b8f-4f74-b20a-b7e52b574423","displayName":"App\\Jobs\\InsertCampaignSubscribers","job":"Illuminate\\Queue\\CallQueuedHandler@call","maxTries":null,"maxExceptions":null,"backoff":null,"timeout":null,"retryUntil":null,"data":{"commandName":"App\\Jobs\\InsertCampaignSubscribers","command":"O:34:\"App\\Jobs\\InsertCampaignSubscribers\":11:{s:15:\"\u0000*\u0000campaignData\";a:1:{s:12:\"campaign_ids\";a:2:{i:0;i:4;i:1;i:3;}}s:3:\"job\";N;s:10:\"connection\";N;s:5:\"queue\";s:28:\"add_subscribers_for_campaign\";s:15:\"chainConnection\";N;s:10:\"chainQueue\";N;s:19:\"chainCatchCallbacks\";N;s:5:\"delay\";N;s:11:\"afterCommit\";N;s:10:\"middleware\";a:0:{}s:7:\"chained\";a:0:{}}"}}
+
     */
 
     /**
@@ -62,7 +66,7 @@ class InsertCampaignSubscribers implements ShouldQueue
                 $listData = $listModel->getActiveListsById($list);
                 if ($listData->status == Lists::ACTIVE) {
                     \Log::info("Inserting list id " . $list . " for sending");
-                    $listSubscribers = $listSubscribersModel->getListSubscribersByListId($list);
+                    $listSubscribers = $listSubscribersModel->getListSubscribersByListIdRemovingBounce($list);
                     $listSubscribersArr = [];
                     foreach($listSubscribers as $listSubscriber) {
                         unset($listSubscriber->id);

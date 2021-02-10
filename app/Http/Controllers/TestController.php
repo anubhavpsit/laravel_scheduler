@@ -8,6 +8,7 @@ use App\Models\CampaignLinks;
 use App\Models\CampaignSubscribers;
 use App\Models\ListPersonalizationInfo;
 use App\Models\ScheduleCampaignsToProcess;
+use App\Models\ListSubscribers;
 
 class TestController extends Controller
 {
@@ -33,6 +34,24 @@ class TestController extends Controller
     }
 
     public function test() {
+
+        echo "<pre>";
+        $listSubscribersModel = new ListSubscribers();
+        $listSubscribers = $listSubscribersModel->getListSubscribersByListId(177);
+        foreach($listSubscribers as $listSubscriber) {
+            print_r($listSubscriber->list_id);
+            echo "<br>";
+        }
+        // print_r($listSubscribers);
+
+        $listSubscribersE = $listSubscribersModel->getListSubscribersByListIdRemovingBounce(177);
+        foreach($listSubscribersE as $listSubscriber) {
+            print_r($listSubscriber->list_id);
+            echo "<br>";
+        }
+        // print_r($listSubscribersE);
+
+        exit();
         $batchId = 1612241094;
         //$batchId = 1612241096;
         
